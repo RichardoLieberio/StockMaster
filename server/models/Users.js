@@ -40,6 +40,14 @@ userSchema.pre("save", function (next) {
     next();
 });
 
+userSchema.pre("findOne", function (next) {
+    const filterData = this.getFilter();
+    if (filterData.username) {
+        filterData.username = filterData.username.toLowerCase();
+    }
+    next();
+})
+
 userSchema.pre("findOneAndUpdate", function (next) {
     const updatedData = this.getUpdate();
     if (updatedData.username) {

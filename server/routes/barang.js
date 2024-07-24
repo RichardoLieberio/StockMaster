@@ -18,7 +18,7 @@ router.post("/", handler.createNewBarangHandler, errorHandler(contr.createNewBar
 router.get("/:id", isValidId, errorHandler(contr.getBarangData));
 
 //Update barang data
-router.patch("/:id", isValidId, errorHandler(contr.updateBarangData));
+router.patch("/:id", isValidId, handler.updateBarangDataHandler, errorHandler(contr.updateBarangData));
 
 //Delete barang
 router.delete("/:id", isValidId, errorHandler(contr.deleteBarang));

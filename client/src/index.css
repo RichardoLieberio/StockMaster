@@ -1,0 +1,71 @@
+.light {
+  --primary-color-: #0047ab ;
+  --secondary-color-: #5f87ff;
+  --container-color-: #ffffff ;
+  --secondary-container-color-: #f0f3fc;
+  --form-background-color-: #ffffff;
+  --success-color-: #4caf50;
+  --warning-color-: #ff9800;
+  --danger-color-: #f44336;
+  --info-color-: #2196f3;
+  --dark-text-: #333333;
+  --light-text-: #ffffff;
+  --background-color-: #f8f9fc;
+  --shadow-color-: rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  --primary-color-: #70a1ff;
+  --secondary-color-: #90b6ff;
+  --container-color-: #1f1f1f;
+  --secondary-container-color-: #2a2a2a;
+  --form-background-color-: #2a2a2a;
+  --success-color-: #66bb6a;
+  --warning-color-: #ffa726;
+  --danger-color-: #ef5350;
+  --info-color-: #64b5f6;
+  --dark-text-: #ffffff ;
+  --light-text-: #f0f0f0;
+  --background-color-: #121212;
+  --shadow-color-: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  cursor: default;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.login {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background-color: var(--background-color-);
+}
+
+.loginForm {
+  padding: 20px;
+  background-color: var(--form-background-color-);
+  box-shadow: 0 0 5px var(--shadow-color-);
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+h1 {
+  color: var(--dark-text-);
+}

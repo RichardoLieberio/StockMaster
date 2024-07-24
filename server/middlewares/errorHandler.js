@@ -11,6 +11,7 @@ function errorHandler(handler) {
                 }
                 res.json({error: errMsg});
             } else {
+                console.log(error);
                 res.json({error: "Error tidak diketahui"});
             }
         }
