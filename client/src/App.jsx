@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Cookies from "js-cookie";
+
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 import { setMode } from "./redux/theme";
 
@@ -11,6 +14,7 @@ import Login from "./pages/Login";
 function App() {
   const [ firstRender, setFirstRender ] = useState(true);
 
+  const theme = useSelector((state) => state.theme.mode) || "light";
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,12 +26,15 @@ function App() {
   }, [firstRender]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </Router>
+    <div className={theme}>
+      <ToastContainer limit={1} position="top-center" theme="colored" />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
