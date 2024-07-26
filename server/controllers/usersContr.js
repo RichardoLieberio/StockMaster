@@ -16,12 +16,12 @@ async function userLogin(req, res) {
                 httpOnly: true,
                 sameSite: "strict"
             });
-            res.json({success: "User ditemukan", token: accessToken});
+            res.json({success: "User ditemukan", token: accessToken, user});
         } else {
-            res.json({error: "Username dan password tidak sesuai"});
+            res.json({formError: "Username dan password tidak sesuai"});
         }
     } else {
-        res.json({error: "Username dan password tidak sesuai"});
+        res.json({formError: "Username dan password tidak sesuai"});
     }
 }
 

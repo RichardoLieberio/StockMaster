@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
+import { setToken, setUser } from "../redux/auth";
+
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import BeatLoader from "react-spinners/BeatLoader";
+import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
 function Login() {
@@ -16,9 +18,10 @@ function Login() {
     const [ passwordFilled, setPasswordFilled ] = useState(false);
     const [ passwordFocus, setPasswordFocus ] = useState(false);
     const [ isSubmitting, setIsSubmitting] = useState(false);
+    const [ error, setError ] = useState([]);
     const passwordRef = useRef(null);
 
-    const theme = useSelector((state) => state.theme.mode) || "light";
+    const dispatch = useDispatch();
 
     useEffect(() => {
         username && setUsernameFilled(true);
@@ -68,17 +71,28 @@ function Login() {
     function submitHandler(e) {
         e.preventDefault();
         setIsSubmitting(true);
+        setError([]);
         axios.post(
             `${process.env.REACT_APP_API}/api/users/login`,
             {username, pwd: password, rememberMe},
-            {headers: {"Content-Type": "application/json"}}
+            {headers: {"Content-Type": "application/json"}, withCredentials: true}
         ).then(function (data) {
-            toast.success("Success", {
-                className: "toastSuccess"
-            });
-            console.log(data);
+            setIsSubmitting(false);
+            const response = data.data;
+            if (response.error) {
+                toast.error(response.error);
+            } else if (response.formError) {
+                typeof (response.formError) === "string" ? setError([response.formError]) : setError(response.formError);
+            } else if (response.success) {
+                dispatch(setToken(response.token));
+                dispatch(setUser(response.user));
+                toast.success("Anda berhasil masuk");
+            } else {
+                toast.error("Request yang buruk");
+            }
         }).catch(function (error) {
-            console.log(error);
+            setIsSubmitting(false);
+            toast.error("Request yang buruk");
         });
     }
 
@@ -86,8 +100,8 @@ function Login() {
     const passwordLabelClass = "inputLabel" + (passwordFocus ? " focus" : "") + (passwordFilled ? " filled" : "");
 
     return (
-        <div className={"login"}>
-            <form onSubmit={submitHandler} className={"loginForm"} autoComplete="off" spellCheck="off">
+        <div className="login">
+            <form onSubmit={submitHandler} className="loginForm" autoComplete="off" spellCheck="off">
                 <h1 className="loginHeader">Login</h1>
                 <div className="inputBox">
                     <input
@@ -99,7 +113,7 @@ function Login() {
                         className="inputField"
                         id="username"
                         disabled={isSubmitting}
-                        // required={true}
+                        required={true}
                     />
                     <label htmlFor="username" className={usernameLabelClass}>Username</label>
                 </div>
@@ -114,11 +128,18 @@ function Login() {
                         className="inputField password"
                         id="pwd"
                         disabled={isSubmitting}
-                        // required={true}
+                        required={true}
                     />
                     <label htmlFor="pwd" className={passwordLabelClass}>Password</label>
                     {showPwd ? <FaEye onClick={toggleShowPwd} className="pwdSuffix" /> : <FaEyeSlash onClick={toggleShowPwd} className="pwdSuffix" />}
                 </div>
+                {
+                    error.length
+                    ? <div className="errors">
+                        {error.map((err, i) => <small key={i} className="error">{err}</small>)}
+                    </div>
+                    : ""
+                }
                 <div className="rememberMeBox">
                     <input
                         checked={rememberMe}
@@ -130,8 +151,8 @@ function Login() {
                     />
                     <label htmlFor="rememberMe" className="inputCheckboxLabel">Ingat saya</label>
                 </div>
-                <button disabled={isSubmitting} className={`${theme} loginBtn`}>
-                    {isSubmitting ? <BeatLoader size={8} color={"var(--beat-loader-color-)"} /> : "Masuk"}
+                <button disabled={isSubmitting} className="loginBtn">
+                    {isSubmitting ? <ThreeDots height="15" width="26" color="var(--three-dots-color-)" /> : "Masuk"}
                 </button>
             </form>
         </div>

@@ -11,7 +11,7 @@ function userLoginHandler(req, res, next) {
         req.formData = {username, pwd, rememberMe};
         next();
     } else {
-        res.json({error: errMsg});
+        res.json({formError: errMsg});
     }
 }
 
